@@ -78,6 +78,15 @@ function steeef_chpwd {
 }
 add-zsh-hook chpwd steeef_chpwd
 
+function terraform_workspace {
+    FILE=.terraform/environment
+
+    if [ -f $FILE ]; then
+        tfenv=$(cat .terraform/environment 2> /dev/null | sed "s/\(.*\)/\1/")%{$reset_color%}
+        echo "(%F{161}$tfenv%f)"
+    fi
+}
+
 function steeef_precmd {
     if [[ -n "$PR_GIT_UPDATE" ]] ; then
         # check for untracked files or updated submodules, since vcs_info doesn't
@@ -95,4 +104,4 @@ function steeef_precmd {
 }
 add-zsh-hook precmd steeef_precmd
 
-PROMPT=$'%{$purple%}%n${PR_RST}@%{$orange%}%m${PR_RST} %{$limegreen%}%~${PR_RST} $vcs_info_msg_0_$(virtualenv_info)$ '
+PROMPT=$'%{$purple%}%n${PR_RST}@%{$orange%}%m${PR_RST} %{$limegreen%}%~${PR_RST} $vcs_info_msg_0_$(virtualenv_info)$(terraform_workspace)$ '
