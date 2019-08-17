@@ -104,4 +104,37 @@ function steeef_precmd {
 }
 add-zsh-hook precmd steeef_precmd
 
-PROMPT=$'%{$purple%}%n${PR_RST}@%{$orange%}%m${PR_RST} %{$limegreen%}%~${PR_RST} $vcs_info_msg_0_$(virtualenv_info)$(terraform_workspace)$ '
+function prompt-length() {
+  emulate -L zsh
+  local COLUMNS=${2:-$COLUMNS}
+  local -i x y=$#1 m
+  if (( y )); then
+    while (( ${${(%):-$1%$y(l.1.0)}[-1]} )); do
+      x=y
+      (( y *= 2 ));
+    done
+    local xy
+    while (( y > x + 1 )); do
+      m=$(( x + (y - x) / 2 ))
+      typeset ${${(%):-$1%$m(l.x.y)}[-1]}=$m
+    done
+  fi
+  echo $x
+}
+
+function fill-line() {
+  emulate -L zsh
+  local left_len=$(prompt-length $1)
+  local right_len=$(prompt-length $2 9999)
+  local pad_len=$((COLUMNS - left_len - right_len - ${ZLE_RPROMPT_INDENT:-1}))
+  if (( pad_len < 1 )); then
+    # Not enough space for the right part. Drop it.
+    echo -E - ${1}
+  else
+    local pad=${(pl.$pad_len.. .)}  # pad_len spaces
+    echo -E - ${1}${pad}${2}
+  fi
+}
+
+PROMPT=$'$(fill-line "╭─%{$purple%}%n${PR_RST}@%{$orange%}%m${PR_RST} %{$limegreen%}%~${PR_RST} $vcs_info_msg_0_$(virtualenv_info)$(terraform_workspace) " "  %F{60}[%D{%a %b %d %H:%M:%S}]%f")\n╰─%B$%b '
+#RPROMPT='%{$red%}%D{%a %b %d %H:%M:%S}' # text to stay on the right os cursor
