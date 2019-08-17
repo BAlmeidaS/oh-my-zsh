@@ -136,5 +136,6 @@ function fill-line() {
   fi
 }
 
-PROMPT=$'$(fill-line "╭─%{$purple%}%n${PR_RST}@%{$orange%}%m${PR_RST} %{$limegreen%}%~${PR_RST} $vcs_info_msg_0_$(virtualenv_info)$(terraform_workspace) " "  %F{60}[%D{%a %b %d %H:%M:%S}]%f")\n╰─%B$%b '
-#RPROMPT='%{$red%}%D{%a %b %d %H:%M:%S}' # text to stay on the right os cursor
+PROMPT=$'╭─%{$purple%}%n${PR_RST}@%{$orange%}%m${PR_RST} %{$limegreen%}%~${PR_RST} $vcs_info_msg_0_$(virtualenv_info)$(terraform_workspace)\n╰─%B$%b '
+# PROMPT=$'$(fill-line "╭─%{$purple%}%n${PR_RST}@%{$orange%}%m${PR_RST} %{$limegreen%}%~${PR_RST} $vcs_info_msg_0_$(virtualenv_info)$(terraform_workspace) " "  %F{60}[%D{%a %b %d %H:%M:%S}]%f")\n╰─%B$%b ' #with date at the right
+RPROMPT='%F{60}[%D{%a %b %d %H:%M:%S}]%f' # text to stay on the right os cursor
