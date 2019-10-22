@@ -180,7 +180,9 @@ function show_time() {
       if (( min > 0)); then
         echo "$min"m "$sec"s
       else
-        echo "$sec"s
+        if (( sec > 5)); then
+          echo "$sec"s
+        fi
       fi
     fi
   fi
