@@ -137,6 +137,7 @@ function fill-line() {
 }
 
 function preexec() {
+  unset timer
   timer=${SECONDS}
 }
 
