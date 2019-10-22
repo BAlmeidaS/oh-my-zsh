@@ -136,6 +136,56 @@ function fill-line() {
   fi
 }
 
+function preexec() {
+  timer=${SECONDS}
+}
+
+function precmd() {
+  if [ $timer ]; then
+    elapsed=$(($SECONDS - $timer))
+  fi
+}
+
+function show_time() {
+  num=$1
+  min=0
+  hour=0
+  day=0
+  if ((num>59)); then
+    ((sec=num%60))
+    ((num=num/60))
+    if ((num>59));then
+      ((min=num%60))
+      ((num=num/60))
+      if ((num>23));then
+        ((hour=num%24))
+        ((day=num/24))
+      else
+        ((hour=num))
+      fi
+    else
+    ((min=num))
+    fi
+  else
+    ((sec=num))
+  fi
+
+  if (( day > 0 )); then
+    echo "$day"d "$hour"h "$min"m "$sec"s
+  else
+    if (( hour > 0)); then
+      echo "$hour"h "$min"m "$sec"s
+    else
+      if (( min > 0)); then
+        echo "$min"m "$sec"s
+      else
+        echo "$sec"s
+      fi
+    fi
+  fi
+
+}
+
 PROMPT=$'╭─%{$purple%}%n${PR_RST}@%{$orange%}%m${PR_RST} %{$limegreen%}%~${PR_RST} $vcs_info_msg_0_$(virtualenv_info)$(terraform_workspace)\n╰─%B$%b '
-# PROMPT=$'$(fill-line "╭─%{$purple%}%n${PR_RST}@%{$orange%}%m${PR_RST} %{$limegreen%}%~${PR_RST} $vcs_info_msg_0_$(virtualenv_info)$(terraform_workspace) " "  %F{60}[%D{%a %b %d %H:%M:%S}]%f")\n╰─%B$%b ' #with date at the right
+PROMPT=$'$(fill-line "╭─%{$purple%}%n${PR_RST}@%{$orange%}%m${PR_RST} %{$limegreen%}%~${PR_RST} $vcs_info_msg_0_$(virtualenv_info)$(terraform_workspace) " "  %{$limegreen%}$(show_time $elapsed)%f")\n╰─%B$%b ' #with date at the right
 RPROMPT='%F{60}[%D{%a %b %d %H:%M:%S}]%f' # text to stay on the right os cursor
