@@ -137,13 +137,14 @@ function fill-line() {
 }
 
 function preexec() {
-  unset timer
   timer=${SECONDS}
 }
 
 function precmd() {
+  elapsed=0
   if [ $timer ]; then
     elapsed=$(($SECONDS - $timer))
+    unset timer
   fi
 }
 
