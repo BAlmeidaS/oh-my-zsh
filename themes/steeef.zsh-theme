@@ -194,7 +194,7 @@ function kubectl_namespace {
     FILE=$HOME/.kube/config
 
     if [ -f $FILE ]; then
-      context=$(kubectl config current-context)
+      context=$(sed -e "s/^current-context: \(.*\)$/\1/;t;d" /home/bruno/.kube/config)
       echo "(%F{161}$context%f)"
     fi
 }
