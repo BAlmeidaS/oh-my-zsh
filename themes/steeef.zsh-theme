@@ -191,9 +191,12 @@ function show_time() {
 }
 
 function kubectl_namespace {
-    FOREGROUND=$LIGHT_RED
-    context=$(kubectl config current-context)
-    echo "(%F{161}$context%f)"
+    FILE=$HOME/.kube/config
+
+    if [ -f $FILE ]; then
+      context=$(kubectl config current-context)
+      echo "(%F{161}$context%f)"
+    fi
 }
 
 PROMPT=$'$(fill-line "╭─%{$purple%}%n${PR_RST}@%{$orange%}%m${PR_RST} %{$limegreen%}%~${PR_RST} $vcs_info_msg_0_$(virtualenv_info)$(terraform_workspace)$(kubectl_namespace) " "  %{$limegreen%}$(show_time $elapsed)%f")\n╰─%B$%b ' #with date at the right
