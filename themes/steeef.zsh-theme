@@ -199,5 +199,10 @@ function kubectl_namespace {
     fi
 }
 
-PROMPT=$'$(fill-line "╭─%{$purple%}%n${PR_RST}@%{$orange%}%m${PR_RST} %{$limegreen%}%~${PR_RST} $vcs_info_msg_0_$(virtualenv_info)$(terraform_workspace)$(kubectl_namespace) " "  %{$limegreen%}$(show_time $elapsed)%f")\n╰─%B$%b ' #with date at the right
+function gcp_project {
+    project=$(gcloud config get-value project)
+    echo "(%F{245}$project%f)"
+}
+
+PROMPT=$'$(fill-line "╭─%{$purple%}%n${PR_RST}@%{$orange%}%m${PR_RST} %{$limegreen%}%~${PR_RST} $vcs_info_msg_0_$(virtualenv_info)$(terraform_workspace)$(kubectl_namespace)$(gcp_project) " "  %{$limegreen%}$(show_time $elapsed)%f")\n╰─%B$%b ' #with date at the right
 RPROMPT='%F{60}[%D{%a %b %d %H:%M:%S}]%f' # text to stay on the right os cursor
