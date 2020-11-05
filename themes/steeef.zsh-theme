@@ -190,6 +190,11 @@ function show_time() {
 
 }
 
-PROMPT=$'╭─%{$purple%}%n${PR_RST}@%{$orange%}%m${PR_RST} %{$limegreen%}%~${PR_RST} $vcs_info_msg_0_$(virtualenv_info)$(terraform_workspace)\n╰─%B$%b '
-PROMPT=$'$(fill-line "╭─%{$purple%}%n${PR_RST}@%{$orange%}%m${PR_RST} %{$limegreen%}%~${PR_RST} $vcs_info_msg_0_$(virtualenv_info)$(terraform_workspace) " "  %{$limegreen%}$(show_time $elapsed)%f")\n╰─%B$%b ' #with date at the right
+function kubectl_namespace {
+    FOREGROUND=$LIGHT_RED
+    context=$(kubectl config current-context)
+    echo "(%F{161}$context%f)"
+}
+
+PROMPT=$'$(fill-line "╭─%{$purple%}%n${PR_RST}@%{$orange%}%m${PR_RST} %{$limegreen%}%~${PR_RST} $vcs_info_msg_0_$(virtualenv_info)$(terraform_workspace)$(kubectl_namespace) " "  %{$limegreen%}$(show_time $elapsed)%f")\n╰─%B$%b ' #with date at the right
 RPROMPT='%F{60}[%D{%a %b %d %H:%M:%S}]%f' # text to stay on the right os cursor
