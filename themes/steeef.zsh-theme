@@ -201,7 +201,7 @@ function kubectl_namespace {
 
 function gcp_project {
     project=$(gcloud config get-value project)
-    echo "(%F{245}$project%f)"
+    echo " (%F{245}$project%f)"
 }
 
 PROMPT=$'$(fill-line "╭─%{$purple%}%n${PR_RST}@%{$orange%}%m${PR_RST} %{$limegreen%}%~${PR_RST} $vcs_info_msg_0_$(virtualenv_info)$(terraform_workspace)$(kubectl_namespace)$(gcp_project) " "  %{$limegreen%}$(show_time $elapsed)%f")\n╰─%B$%b ' #with date at the right
